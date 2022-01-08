@@ -5,6 +5,7 @@ import com.lyhq.querydsl.chapter05.bean.QGoodInfoBean;
 import com.lyhq.querydsl.chapter05.bean.QGoodTypeBean;
 import com.lyhq.querydsl.chapter05.dto.GoodDTO;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.Coalesce;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,18 +57,24 @@ public class GoodController {
         return queryFactory
                 .select(
                         Projections.bean(
-                                GoodDTO.class,//返回自定义实体的类型
+                                //返回自定义实体的类型
+                                GoodDTO.class,
                                 qGoodInfoBean.id,
                                 qGoodInfoBean.price,
                                 qGoodInfoBean.title,
                                 qGoodInfoBean.unit,
-                                qGoodTypeBean.name.as("typeName"),//使用别名对应dto内的typeName
-                                qGoodTypeBean.id.as("typeId")//使用别名对应dto内的typeId
+                                //使用别名对应dto内的typeName
+                                qGoodTypeBean.name.as("typeName"),
+                                //使用别名对应dto内的typeId
+                                qGoodTypeBean.id.as("typeId")
                         )
                 )
-                .from(qGoodInfoBean, qGoodTypeBean)//构建两表笛卡尔集
-                .where(qGoodInfoBean.typeId.eq(qGoodTypeBean.id))//关联两表
-                .orderBy(qGoodInfoBean.order.desc())//倒序
+                //构建两表笛卡尔集
+                .from(qGoodInfoBean, qGoodTypeBean)
+                //关联两表
+                .where(qGoodInfoBean.typeId.eq(qGoodTypeBean.id))
+                //倒序
+                .orderBy(qGoodInfoBean.order.desc())
                 .fetch();
     }
 
@@ -83,18 +90,26 @@ public class GoodController {
         QGoodInfoBean qGoodInfoBean = QGoodInfoBean.goodInfoBean;
         //商品类型
         QGoodTypeBean qGoodTypeBean = QGoodTypeBean.goodTypeBean;
+        final Coalesce<String> coalesce =
+                new Coalesce<>(String.class).add(qGoodInfoBean.title).add(qGoodTypeBean.name);
         return queryFactory
                 .select(
+                        coalesce,
                         qGoodInfoBean.id,
                         qGoodInfoBean.price,
                         qGoodInfoBean.title,
+                        qGoodInfoBean.title.when("").then(qGoodTypeBean.name).otherwise(qGoodInfoBean.title),
+                        qGoodInfoBean.title.nullif(qGoodTypeBean.name),
                         qGoodInfoBean.unit,
                         qGoodTypeBean.name,
                         qGoodTypeBean.id
                 )
-                .from(qGoodInfoBean, qGoodTypeBean)//构建两表笛卡尔集
-                .where(qGoodInfoBean.typeId.eq(qGoodTypeBean.id))//关联两表
-                .orderBy(qGoodInfoBean.order.desc())//倒序
+                //构建两表笛卡尔集
+                .from(qGoodInfoBean, qGoodTypeBean)
+                //关联两表
+                .where(qGoodInfoBean.typeId.eq(qGoodTypeBean.id))
+                //倒序
+                .orderBy(qGoodInfoBean.order.desc())
                 .fetch()
                 .stream()
                 //转换集合内的数据
@@ -134,7 +149,8 @@ public class GoodController {
         QGoodTypeBean qGoodTypeBean = QGoodTypeBean.goodTypeBean;
 
         return queryFactory
-                .selectFrom(qGoodInfoBean)//查询商品基本信息表
+                //查询商品基本信息表
+                .selectFrom(qGoodInfoBean)
                 .where(
                         //查询类型名称包含“蔬菜”
                         qGoodInfoBean.typeId.in(

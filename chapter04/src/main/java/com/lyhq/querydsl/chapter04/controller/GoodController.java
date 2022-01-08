@@ -39,10 +39,9 @@ public class GoodController {
     }
 
     @RequestMapping(value = "/selectByType")
-    public List<GoodInfoBean> selectByType
-            (
-                    @RequestParam(value = "typeId") Long typeId //类型编号
-            ) {
+    public List<GoodInfoBean> selectByType(
+            @RequestParam(value = "typeId") Long typeId //类型编号
+    ) {
         //商品查询实体
         QGoodInfoBean qGoodInfoBean = QGoodInfoBean.goodInfoBean;
         //商品类型查询实体

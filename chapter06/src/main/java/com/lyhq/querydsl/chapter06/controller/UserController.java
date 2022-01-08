@@ -40,13 +40,15 @@ public class UserController {
      * @return
      */
     @RequestMapping(value = "/countExample")
-    public long countExample() {
+    public Long countExample() {
         //用户查询实体
         QUserBean qUserBean = QUserBean.userBean;
         return queryFactory
-                .select(qUserBean.id.count())//根据主键查询总条数
+                //根据主键查询总条数
+                .select(qUserBean.id.count())
                 .from(qUserBean)
-                .fetchOne();//返回总条数
+                //返回总条数
+                .fetchOne();
     }
 
     /**
@@ -55,13 +57,15 @@ public class UserController {
      * @return
      */
     @RequestMapping(value = "/sumExample")
-    public double sumExample() {
+    public Double sumExample() {
         //用户查询实体
         QUserBean qUserBean = QUserBean.userBean;
         return queryFactory
-                .select(qUserBean.socre.sum())//查询积分总数
+                //查询积分总数
+                .select(qUserBean.socre.sum())
                 .from(qUserBean)
-                .fetchOne();//返回积分总数
+                //返回积分总数
+                .fetchOne();
     }
 
 
@@ -71,13 +75,15 @@ public class UserController {
      * @return
      */
     @RequestMapping(value = "/avgExample")
-    public double avgExample() {
+    public Double avgExample() {
         //用户查询实体
         QUserBean qUserBean = QUserBean.userBean;
         return queryFactory
-                .select(qUserBean.socre.avg())//查询积分平均值
+                //查询积分平均值
+                .select(qUserBean.socre.avg())
                 .from(qUserBean)
-                .fetchOne();//返回平均值
+                //返回平均值
+                .fetchOne();
     }
 
     /**
@@ -86,13 +92,15 @@ public class UserController {
      * @return
      */
     @RequestMapping(value = "/maxExample")
-    public double maxExample() {
+    public Double maxExample() {
         //用户查询实体
         QUserBean qUserBean = QUserBean.userBean;
         return queryFactory
-                .select(qUserBean.socre.max())//查询最大积分
+                //查询最大积分
+                .select(qUserBean.socre.max())
                 .from(qUserBean)
-                .fetchOne();//返回最大积分
+                //返回最大积分
+                .fetchOne();
     }
 
     /**
@@ -107,8 +115,11 @@ public class UserController {
         return queryFactory
                 .select(qUserBean)
                 .from(qUserBean)
-                .groupBy(qUserBean.socre)//根据积分分组
-                .having(qUserBean.age.gt(22))//并且年龄大于22岁
-                .fetch();//返回用户列表
+                //根据积分分组
+                .groupBy(qUserBean.socre)
+                //并且年龄大于22岁
+                .having(qUserBean.age.gt(22))
+                //返回用户列表
+                .fetch();
     }
 }

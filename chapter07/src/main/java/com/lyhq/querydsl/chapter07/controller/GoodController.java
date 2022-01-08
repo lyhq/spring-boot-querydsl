@@ -49,7 +49,8 @@ public class GoodController {
         QGoodTypeBean qGoodTypeBean = QGoodTypeBean.goodTypeBean;
 
         return queryFactory
-                .selectFrom(qGoodInfoBean)//查询商品基本信息表
+                //查询商品基本信息表
+                .selectFrom(qGoodInfoBean)
                 .where(
                         //查询类型名称包含“蔬菜”
                         qGoodInfoBean.typeId.in(

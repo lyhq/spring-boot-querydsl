@@ -7,7 +7,6 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -57,9 +56,12 @@ public class UserController {
         QUserBean qUserBean = QUserBean.userBean;
         //查询并返回结果集
         return queryFactory
-                .selectFrom(qUserBean)//查询源
-                .orderBy(qUserBean.id.desc())//根据id倒序
-                .fetch();//执行查询并获取结果集
+                //查询源
+                .selectFrom(qUserBean)
+                //根据id倒序
+                .orderBy(qUserBean.id.desc())
+                //执行查询并获取结果集
+                .fetch();
     }
 
     /**
@@ -69,8 +71,10 @@ public class UserController {
      */
     @RequestMapping(value = "/queryAll2")
     public Page<UserBean> queryAll2() {
-        Page<UserBean> userBeanPage = userJPA.findAll(QUserBean.userBean.isNotNull(), PageRequest.of(1, 1));
-        return userBeanPage;
+        return userJPA.findAll(
+                QUserBean.userBean.isNotNull(),
+                PageRequest.of(1, 1)
+        );
     }
 
     /**
@@ -85,9 +89,12 @@ public class UserController {
         QUserBean qUserBean = QUserBean.userBean;
         //查询并返回结果集
         return queryFactory
-                .selectFrom(qUserBean)//查询源
-                .where(qUserBean.id.eq(id))//指定查询具体id的数据
-                .fetchOne();//执行查询并返回单个结果
+                //查询源
+                .selectFrom(qUserBean)
+                //指定查询具体id的数据
+                .where(qUserBean.id.eq(id))
+                //执行查询并返回单个结果
+                .fetchOne();
     }
 
     /**
@@ -102,7 +109,8 @@ public class UserController {
         //使用querydsl查询
         QUserBean qUserBean = QUserBean.userBean;
         //查询并返回指定id的单条数据
-        return userJPA.findOne(qUserBean.id.eq(id)).orElse(null);
+        return userJPA.findOne(qUserBean.id.eq(id))
+                .orElse(null);
     }
 
     /**
@@ -117,8 +125,11 @@ public class UserController {
         QUserBean qUserBean = QUserBean.userBean;
 
         return queryFactory
-                .selectFrom(qUserBean)//查询源
-                .where(qUserBean.name.like(name))//根据name模糊查询
-                .fetch();//执行查询并返回结果集
+                //查询源
+                .selectFrom(qUserBean)
+                //根据name模糊查询
+                .where(qUserBean.name.like("%" + name + "%"))
+                //执行查询并返回结果集
+                .fetch();
     }
 }

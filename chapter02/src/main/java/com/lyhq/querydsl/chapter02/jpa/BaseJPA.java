@@ -15,6 +15,7 @@ import org.springframework.data.repository.NoRepositoryBean;
  * 码云：http://git.oschina.net/jnyqy
  * ========================
  */
+// 告诉JPA不要创建该接口的bean对象，这样spring容器中就不会有BaseJPA接口的bean对象
 @NoRepositoryBean
 public interface BaseJPA<T>
         extends JpaRepository<T, Long>,

@@ -15,8 +15,7 @@ import java.io.Serializable;
  * ========================
  */
 @Data
-public class GoodDTO
-        implements Serializable {
+public class GoodDTO implements Serializable {
     //主键
     private Long id;
     //标题

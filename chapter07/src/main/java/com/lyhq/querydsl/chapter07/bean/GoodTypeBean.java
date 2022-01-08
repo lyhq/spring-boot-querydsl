@@ -17,8 +17,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "good_types")
 @Data
-public class GoodTypeBean
-        implements Serializable {
+public class GoodTypeBean implements Serializable {
     //主键
     @Id
     @GeneratedValue
